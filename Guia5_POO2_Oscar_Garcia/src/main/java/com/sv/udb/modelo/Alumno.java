@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Pers.findByCodiUbicGeog", query = "SELECT p FROM Pers p WHERE p.codiUbicGeog = :codiUbicGeog"),
     @NamedQuery(name = "Pers.findByFechAlta", query = "SELECT p FROM Pers p WHERE p.fechAlta = :fechAlta"),
     @NamedQuery(name = "Pers.findByFechBaja", query = "SELECT p FROM Pers p WHERE p.fechBaja = :fechBaja")})
-public class Pers implements Serializable {
+public class Alumno implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -97,10 +97,10 @@ public class Pers implements Serializable {
     @ManyToOne
     private TipoPers codiTipoPers;
 
-    public Pers() {
+    public Alumno() {
     }
 
-    public Pers(Long codiPers) {
+    public Alumno(Long codiPers) {
         this.codiPers = codiPers;
     }
 
@@ -244,10 +244,10 @@ public class Pers implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pers)) {
+        if (!(object instanceof Alumno)) {
             return false;
         }
-        Pers other = (Pers) object;
+        Alumno other = (Alumno) object;
         if ((this.codiPers == null && other.codiPers != null) || (this.codiPers != null && !this.codiPers.equals(other.codiPers))) {
             return false;
         }

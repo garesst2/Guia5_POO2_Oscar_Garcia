@@ -60,7 +60,7 @@ public class TipoPers implements Serializable {
     @OneToMany(mappedBy = "codiTipoPers")
     private Collection<PersHist> persHistCollection;
     @OneToMany(mappedBy = "codiTipoPers")
-    private Collection<Pers> persCollection;
+    private Collection<Alumno> persCollection;
 
     public TipoPers() {
     }
@@ -119,11 +119,11 @@ public class TipoPers implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Pers> getPersCollection() {
+    public Collection<Alumno> getPersCollection() {
         return persCollection;
     }
 
-    public void setPersCollection(Collection<Pers> persCollection) {
+    public void setPersCollection(Collection<Alumno> persCollection) {
         this.persCollection = persCollection;
     }
 

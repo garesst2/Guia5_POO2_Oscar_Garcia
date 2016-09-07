@@ -75,7 +75,7 @@ public class PersHist implements Serializable {
     private TipoPers codiTipoPers;
     @JoinColumn(name = "CODI_PERS", referencedColumnName = "CODI_PERS")
     @ManyToOne
-    private Pers codiPers;
+    private Alumno codiPers;
     @OneToMany(mappedBy = "codiPers")
     private Collection<Visi> visiCollection;
 
@@ -158,11 +158,11 @@ public class PersHist implements Serializable {
         this.codiTipoPers = codiTipoPers;
     }
 
-    public Pers getCodiPers() {
+    public Alumno getCodiPers() {
         return codiPers;
     }
 
-    public void setCodiPers(Pers codiPers) {
+    public void setCodiPers(Alumno codiPers) {
         this.codiPers = codiPers;
     }
 

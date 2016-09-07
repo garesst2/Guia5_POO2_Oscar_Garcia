@@ -71,7 +71,7 @@ public class Usua implements Serializable {
     private Collection<Visi> visiCollection;
     @JoinColumn(name = "CODI_PERS", referencedColumnName = "CODI_PERS")
     @ManyToOne
-    private Pers codiPers;
+    private Alumno codiPers;
 
     public Usua() {
     }
@@ -145,11 +145,11 @@ public class Usua implements Serializable {
         this.visiCollection = visiCollection;
     }
 
-    public Pers getCodiPers() {
+    public Alumno getCodiPers() {
         return codiPers;
     }
 
-    public void setCodiPers(Pers codiPers) {
+    public void setCodiPers(Alumno codiPers) {
         this.codiPers = codiPers;
     }
 
