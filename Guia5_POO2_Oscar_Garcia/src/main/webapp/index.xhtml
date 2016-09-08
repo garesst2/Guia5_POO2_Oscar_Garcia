@@ -6,14 +6,29 @@ and open the template in the editor.
 -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width"/>
+        <title>Alumnos</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
-        <h:form id="frmAlum">
-            <h:inputText id="codi" label="Codigo" value=""></h:inputText>
+        <div>Formulario de alumno</div><br/>
+        <h:form id="FormAlum">
+            Código:<h:inputText id="codi" value="#{alumnosBean.objeAlum.codiAlum}"></h:inputText><br/>
+            Nombre:<h:inputText id="nomb" value="#{alumnosBean.objeAlum.nombAlum}"></h:inputText><br/>
+            Apellido:<h:inputText id="apel" value="#{alumnosBean.objeAlum.apelAlum}"></h:inputText><br/>
+            Fecha Nac:<h:inputText id="fechNaci" value="#{alumnosBean.objeAlum.fechNaciAlum}">
+                <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+            </h:inputText><br/>
+            Email:<h:inputText id="email" value="#{alumnosBean.objeAlum.mailAlum}"></h:inputText><br/>
+            Telefono:<h:inputText id="tele" value="#{alumnosBean.objeAlum.teleAlum}"></h:inputText><br/>
+            Direccion:<h:inputText id="dire" value="#{alumnosBean.objeAlum.direAlum}"></h:inputText><br/>
+            Genero:<h:selectOneMenu id="gene" value="#{alumnosBean.objeAlum.geneAlum}">
+                <f:selectItem itemValue="M" itemLabel="Masculino"></f:selectItem>
+                <f:selectItem itemValue="F" itemLabel="Femenino"></f:selectItem>
+            </h:selectOneMenu><br/>
+            <h:commandButton id="btonGuar" actionListener="#{alumnosBean.guard()}" value="Guardar"></h:commandButton>
         </h:form>
     </body>
 </html>
