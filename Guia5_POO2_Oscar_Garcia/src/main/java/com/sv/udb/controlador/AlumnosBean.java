@@ -9,6 +9,9 @@ import com.sv.udb.modelo.Alumnos;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
@@ -79,13 +82,23 @@ public class AlumnosBean implements Serializable {
             et.commit();
             ctx.execute("setMessage('MESS_SUCC','Mensaje', 'Datos eliminados');");
         } catch (Exception ex) {
-            ctx.execute("setMessage('MESS_SUCC','Mensaje', 'Datos NO eliminados');");
+            ctx.execute("setMessage('MESS_ERRO','Mensaje', 'Datos NO eliminados');");
             et.rollback();
             ex.printStackTrace();
         } finally {
             em.close();
             emf.close();
         }
+    }
+
+    public void refresh() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+        ViewHandler viewHandler = application.getViewHandler();
+        UIViewRoot viewRoot = viewHandler.createView(context, context
+                .getViewRoot().getViewId());
+        context.setViewRoot(viewRoot);
+        context.renderResponse();
     }
 
     public void guar() {
