@@ -6,36 +6,28 @@
 package com.sv.udb.controlador;
 
 import com.sv.udb.modelo.Alumnos;
+import java.io.Serializable;
+import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
+import javax.faces.view.ViewScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import org.primefaces.context.RequestContext;
 
 /**
  *
  * @author root
  */
 @Named(value = "alumnosBean")
-@Dependent
-public class AlumnosBean {
-
+@ViewScoped
+public class AlumnosBean implements Serializable{
     private Alumnos objeAlum;
-    private boolean guard;
-
-    /**
-     * Creates a new instance of AlumnoBean
-     */
-    public AlumnosBean() {
-    }
-
-    @PostConstruct //Despues de iniciar la vista
-    public void init() {
-        this.objeAlum = new Alumnos();
-        this.guard = true;
-    }
+    private List<Alumnos> listAlum;
+    private boolean guardar;
 
     public Alumnos getObjeAlum() {
         return objeAlum;
@@ -45,29 +37,78 @@ public class AlumnosBean {
         this.objeAlum = objeAlum;
     }
 
-    public boolean isGuard() {
-        return guard;
+    public boolean isGuardar() {
+        return guardar;
     }
 
-    public void setGuard(boolean guard) {
-        this.guard = guard;
+    public List<Alumnos> getListAlum() {
+        return listAlum;
     }
-
-    public void guard() {
-        boolean resp = false;
+    
+    /**
+     * Creates a new instance of AlumnosBean
+     */
+    
+    public AlumnosBean() {
+    }
+    
+    @PostConstruct
+    public void init()
+    {
+        this.objeAlum = new Alumnos();
+        this.guardar = true;
+        this.consTodo();
+    }
+    public void limpForm()
+    {
+        System.err.println("entyra");
+        this.objeAlum = new Alumnos();
+        this.guardar = true;        
+    }
+    public void guar()
+    {
+        RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        try {
+        try
+        {
             em.persist(this.objeAlum);
             tx.commit();
-            resp = true;
-        } catch (Exception ex) {
+            this.guardar = true;
+            this.listAlum.add(this.objeAlum); //Agrega el objeto a la lista para poderse mostrar en tabla
+            this.objeAlum = new Alumnos(); // Limpiar
+            ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
+        }
+        catch(Exception ex)
+        {
+            ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
             tx.rollback();
         }
-        em.close();
-        emf.close();
+        finally
+        {
+            em.close();
+            emf.close();            
+        }
     }
-
+    
+    public void consTodo()
+    {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
+        EntityManager em = emf.createEntityManager();
+        try
+        {
+            this.listAlum = em.createNamedQuery("Alumnos.findAll", Alumnos.class).getResultList();
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        finally
+        {
+            em.close();
+            emf.close();            
+        }
+    }
 }
