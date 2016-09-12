@@ -24,7 +24,8 @@ import org.primefaces.context.RequestContext;
  */
 @Named(value = "alumnosBean")
 @ViewScoped
-public class AlumnosBean implements Serializable{
+public class AlumnosBean implements Serializable {
+
     private Alumnos objeAlum;
     private List<Alumnos> listAlum;
     private boolean guardar;
@@ -44,71 +45,81 @@ public class AlumnosBean implements Serializable{
     public List<Alumnos> getListAlum() {
         return listAlum;
     }
-    
+
     /**
      * Creates a new instance of AlumnosBean
      */
-    
     public AlumnosBean() {
     }
-    
+
     @PostConstruct
-    public void init()
-    {
+    public void init() {
         this.objeAlum = new Alumnos();
         this.guardar = true;
         this.consTodo();
     }
-    public void limpForm()
-    {
+
+    public void limpForm() {
         System.err.println("entyra");
         this.objeAlum = new Alumnos();
-        this.guardar = true;        
+        this.guardar = true;
     }
-    public void guar()
-    {
+
+    public void elim(int codiAlum) {
+        RequestContext ctx = RequestContext.getCurrentInstance();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+        Alumnos alumno;
+        try {
+            alumno = em.getReference(Alumnos.class, codiAlum);
+            alumno.getCodiAlum();
+            em.remove(alumno);
+            et.commit();
+            ctx.execute("setMessage('MESS_SUCC','Mensaje', 'Datos eliminados');");
+        } catch (Exception ex) {
+            ctx.execute("setMessage('MESS_SUCC','Mensaje', 'Datos NO eliminados');");
+            et.rollback();
+            ex.printStackTrace();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    public void guar() {
         RequestContext ctx = RequestContext.getCurrentInstance(); //Capturo el contexto de la página
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-        try
-        {
+        try {
             em.persist(this.objeAlum);
             tx.commit();
             this.guardar = true;
             this.listAlum.add(this.objeAlum); //Agrega el objeto a la lista para poderse mostrar en tabla
             this.objeAlum = new Alumnos(); // Limpiar
             ctx.execute("setMessage('MESS_SUCC', 'Atención', 'Datos guardados')");
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             ctx.execute("setMessage('MESS_ERRO', 'Atención', 'Error al guardar ')");
             tx.rollback();
-        }
-        finally
-        {
+        } finally {
             em.close();
-            emf.close();            
+            emf.close();
         }
     }
-    
-    public void consTodo()
-    {
+
+    public void consTodo() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("POOPU");
         EntityManager em = emf.createEntityManager();
-        try
-        {
+        try {
             this.listAlum = em.createNamedQuery("Alumnos.findAll", Alumnos.class).getResultList();
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             em.close();
-            emf.close();            
+            emf.close();
         }
     }
 }
